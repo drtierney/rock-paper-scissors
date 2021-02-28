@@ -59,4 +59,4 @@ function game(){
     alert(finalScoreMessage);
 }
 
-game();
+//game();

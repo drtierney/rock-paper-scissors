@@ -1,0 +1,28 @@
+body {
+    display:flex; 
+    flex-direction:column; 
+    justify-content:center;
+    min-height:100vh;
+    max-width: 50%;
+    margin: auto;
+  }
+
+div {
+    height: auto;
+    width: 100%;
+}
+
+.center {
+    text-align: center;
+}
+
+button {
+    width: 20%;
+    height: 50px;
+}
+
+table, th, td {
+    margin: auto;
+    width: 50%;
+    height: 25px;
+  }
