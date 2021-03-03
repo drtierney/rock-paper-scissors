@@ -1,44 +1,40 @@
+//Initialise all variables
 const choices = ['rock', 'paper', 'scissors'];
 let computerSelection = "";
 let playerSelection = "";
 let computerScore = 0;
 let playerScore = 0;
 let roundMessage = "";
-let finalScoreMessage = "";
+let roundNo = 0;
+//Only buttons on screen are Rock, Paper, Scissors
+const buttons = document.querySelectorAll('button');
 
-function computerPlay(){
+//Could be updated to include other matchups
+const matchups = {
+    'rock' : 'scissors',
+    'paper' : 'rock',
+    'scissors' : 'paper'
+}
+
+//Makes Computer pick random choice
+function computerInput(){
     return choices[Math.floor(Math.random() * choices.length)];
 }
 
-function playerInput(){
-    let input;
-    do {
-    input = prompt("Rock, Paper or Scissors? ");
-    }
-    while (!choices.includes(input.toLowerCase()));
-    return input.toLowerCase();
-}
-
+//Play one round and return result
 function playRound(playerSelection, computerSelection){
-    //console.log("COMPUTER: " + computerSelection);
-    //console.log("PLAYER: " + playerSelection);
+    console.log("ROUND: " + (roundNo));
+    console.log("COMPUTER: " + computerSelection);
+    console.log("PLAYER: " + playerSelection);
     
-    if (
-        (playerSelection == "rock" && computerSelection == "scissors") ||
-        (playerSelection == "scissors" && computerSelection == "paper") ||
-        (playerSelection == "paper" && computerSelection == "rock")
-        )
+    if (matchups[playerSelection] == computerSelection)
         {
-            playerScore++;
+            document.getElementById('player-score').textContent = ++playerScore;
             return `You win! ${playerSelection} beats ${computerSelection}`;
         }
-    else if (
-        (playerSelection == "rock" && computerSelection == "paper") ||
-        (playerSelection == "scissors" && computerSelection == "rock") ||
-        (playerSelection == "paper" && computerSelection == "scissors")
-        )  
+    else if (matchups[computerSelection] == playerSelection)  
         {
-            computerScore++;
+            document.getElementById('computer-score').textContent = ++computerScore;
             return `You lose! ${computerSelection} beats ${playerSelection}`;
         }
     else { 
@@ -46,17 +42,32 @@ function playRound(playerSelection, computerSelection){
             }
 }
 
-function game(){
-    for (let i = 0; i < 5; i++){
-    computerSelection = computerPlay();
-    playerSelection   = playerInput();
-    roundMessage = `round #${i+1}: ${playRound(playerSelection, computerSelection)}`;
-    console.log(roundMessage);
-    alert(roundMessage);
-    }
-    finalScoreMessage = `Final score:\nPlayer: ${playerScore}\nComputer: ${computerScore}`;
-    console.log(finalScoreMessage);
-    alert(finalScoreMessage);
+//Either player or Computer Wins 5 rounds, reset the game
+function resetGame(){
+    alert(`Final score:\nPlayer: ${playerScore}\nComputer: ${computerScore}\nRounds: ${roundNo}`)
+    playerScore = 0;
+    computerScore = 0;
+    roundNo = 0;
+    document.getElementById('player-score').textContent = playerScore;
+    document.getElementById('computer-score').textContent = computerScore
+    document.getElementById('game-state').textContent = "GAME ON!!"
 }
 
-//game();
+//Play game 
+function playGame(playerInput){
+    computerSelection = computerInput();
+    playerSelection   = playerInput;
+    roundNo++;
+    roundMessage = `round #${roundNo}: ${playRound(playerSelection, computerSelection)}`;
+    document.getElementById('game-state').textContent = roundMessage;
+    if (playerScore == 5 || computerScore == 5){
+        resetGame();
+    }
+}
+
+//Listen for player pressing any buttons each round
+    buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      playGame(button.textContent.toLowerCase());
+    });
+  });
